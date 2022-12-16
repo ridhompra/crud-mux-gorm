@@ -115,4 +115,5 @@ func Delete(w http.ResponseWriter, r *http.Request) {
 	}
 	message := map[string]string{"message": "Product berhasil dihapus"}
 	ResponseJson(w, http.StatusOK, message)
+	log.Printf("Deleting success id:%d",product.Id)
 }
