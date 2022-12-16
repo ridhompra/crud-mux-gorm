@@ -4,6 +4,7 @@ import (
 	"belajar/belajar2/crud-gorm-mux-mysql/helper"
 	"belajar/belajar2/crud-gorm-mux-mysql/models"
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 	"strconv"
@@ -71,10 +72,47 @@ func Create(w http.ResponseWriter, r *http.Request) {
 
 // untuk memperbaharui product
 func Update(w http.ResponseWriter, r *http.Request) {
-
+	vars := mux.Vars(r)
+	id, err := strconv.ParseInt(vars["id"], 10, 64)
+	if err != nil {
+		ResponseError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+	var product models.Products
+	decoder := json.NewDecoder(r.Body)
+	//men decode ke variable product
+	if err := decoder.Decode(&product); err != nil {
+		ResponseError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+	//diclose dulu  bodynya
+	defer r.Body.Close()
+	if models.DB.Where("id = ?", id).Updates(&product).RowsAffected == 0 {
+		message := fmt.Sprintf("updating failed, id :%d not found", product.Id)
+		ResponseError(w, http.StatusBadRequest, message)
+		return
+	}
+	product.Id = id
+	ResponseJson(w, http.StatusOK, product)
+	log.Printf("Updating success id:%d", product.Id)
 }
 
 // untuk menghapus product
 func Delete(w http.ResponseWriter, r *http.Request) {
-
+	input := map[string]string{"id": ""}
+	decoder := json.NewDecoder(r.Body)
+	if err := decoder.Decode(&input); err != nil {
+		ResponseError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+	//diclose dulu  bodynya
+	defer r.Body.Close()
+	var product models.Products
+	if models.DB.Delete(&product, input["id"]).RowsAffected == 0 {
+		message := fmt.Sprintf("Deleting Failed, id :%d not found", product.Id)
+		ResponseError(w, http.StatusBadRequest, message)
+		return
+	}
+	message := map[string]string{"message": "Product berhasil dihapus"}
+	ResponseJson(w, http.StatusOK, message)
 }
