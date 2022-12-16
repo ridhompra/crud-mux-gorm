@@ -1,8 +1,8 @@
 package productcontroller
 
 import (
-	"belajar/belajar2/crud-gorm-mux-mysql/helper"
-	"belajar/belajar2/crud-gorm-mux-mysql/models"
+	"crud-gorm-mux-mysql/helper"
+	"crud-gorm-mux-mysql/models"
 	"encoding/json"
 	"fmt"
 	"log"

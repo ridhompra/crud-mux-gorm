@@ -1,4 +1,4 @@
-module belajar/belajar2/crud-gorm-mux-mysql
+module crud-gorm-mux-mysql
 
 go 1.19
 

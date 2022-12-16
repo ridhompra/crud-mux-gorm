@@ -1,7 +1,7 @@
 package router
 
 import (
-	"belajar/belajar2/crud-gorm-mux-mysql/controller/productcontroller"
+	"crud-gorm-mux-mysql/controller/productcontroller"
 	"log"
 	"net/http"
 
